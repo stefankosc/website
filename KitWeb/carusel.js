@@ -6,6 +6,7 @@
     var current = 0;
     var next = 1;
     var timer;
+    var numKitties = kitties.length;
 
     dots.forEach(function(dot, i) {
         dot.addEventListener('click', function clicked() {
@@ -17,7 +18,6 @@
             }
             clearTimeout(timer);
             next = i;
-            this.removeEventListener('click', clicked);
             changeState();
         })
     })
@@ -25,26 +25,25 @@
     var timer = setTimeout(changeState, 2000);
 
     function changeState() {
+
         kitties[current].addEventListener('transitionend', function transitionFunction () {
             this.removeEventListener('transitionend', transitionFunction);
-            setTimeout(changeState, 5000);
-
+            timer = setTimeout(changeState, 5000);
+            console.log(timer);
             this.classList.remove('left');
             this.classList.add('right');
             });
         kitties[next].classList.remove('right');
         kitties[current].classList.add('left');
         setDot(next);
-        if (current == kitties.length-1) {
-            current = 0;
-        } else {
-            current++;
-        }
-        if (next == kitties.length-1) {
+        current = next;
+        next = current +1;
+        if (next >= numKitties) {
             next = 0;
-        } else {
-            next++;
-        }
+        };
+        console.log(next);
+
+
         isTransitioning = false;
     };
     function setDot(n) {
